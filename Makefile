@@ -6,7 +6,7 @@ CLI_NAME := echozone-cmd
 GUI_NAME := echozone-gui
 
 # Default target
-build: build-linux-cli
+build: build-windows-cli
 
 # Build CLI for Linux
 build-linux-cli:

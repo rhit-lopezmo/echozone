@@ -17,17 +17,11 @@ func (playlist Playlist) String() string {
 
 
 func LoadPlaylist(url string) Playlist {
-	// playlistID := parsePlaylistID(url)
+
 
 	return Playlist{
 		id: "01",
 		name: "generic_playlist",
 		length: 1,
 	}
-}
-
-func parsePlaylistID(url string) string {
-	id := url
-
-	return id
 }
