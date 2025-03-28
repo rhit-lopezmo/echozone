@@ -1,13 +1,17 @@
 package api
 
 import (
+	"context"
 	echozone "echozone/src/app/internal/core"
 	"fmt"
+	"net/http"
 )
 
-func LoadPlaylistInfo(playlistUrl string) {
-	playlist := echozone.LoadPlaylist(playlistUrl)
+func LoadPlaylistInfo(client *http.Client, ctx context.Context) {
+	playlists := echozone.LoadPlaylists(client, ctx)
 
-	fmt.Println(playlist.String())
+	for _, playlist := range playlists {
+		fmt.Println(playlist.String())
+	}
 }
 
