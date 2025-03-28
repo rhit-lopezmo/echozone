@@ -1,0 +1,6 @@
+# Go build artifacts
+/dist/
+*.exe
+
+# OS junk
+.DS_Store
