@@ -66,7 +66,7 @@ func setupClientAndContext() (*http.Client, context.Context) {
 	}
 
 	ctx := context.Background()
-	config := getOAuthConfig(clientID)
+	config := getOAuthConfig(clientID, clientSecret)
 
 	tok, err := tokenFromFile(tokenPath)
 	if err != nil {
@@ -78,9 +78,10 @@ func setupClientAndContext() (*http.Client, context.Context) {
 	return client, ctx
 }
 
-func getOAuthConfig(clientID string) *oauth2.Config {
+func getOAuthConfig(clientID string, clientSecret string) *oauth2.Config {
 	return &oauth2.Config{
 		ClientID:     clientID,
+		ClientSecret: clientSecret,
 		RedirectURL:  redirectURL,
 		Scopes:       []string{youtube.YoutubeReadonlyScope},
 		Endpoint:     google.Endpoint,

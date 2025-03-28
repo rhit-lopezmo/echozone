@@ -28,7 +28,7 @@ func LoadPlaylists(client *http.Client, ctx context.Context) []Playlist {
 		log.Fatalf("error creating YouTube service: %s", err)
 	}
 
-	call := yt.Playlists.List([]string{"snippet"}).Mine(true).MaxResults(10)
+	call := yt.Playlists.List([]string{"snippet", "contentDetails"}).Mine(true).MaxResults(10)
 	resp, err := call.Do()
 	if err != nil {
 		log.Fatalf("error retrieving playlists: %s", err)
