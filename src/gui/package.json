@@ -1,0 +1,31 @@
+{
+  "name": "echozone",
+  "version": "1.0.0",
+  "description": "echozone - winamp reimagined",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win"
+  },
+  "author": "Manuel Lopez",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.echozone.app",
+    "productName": "echozone",
+    "directories": {
+      "output": "../../dist"
+    },
+    "files": [
+      "**/*",
+      "../../dist/echozone-cmd.exe"
+    ],
+    "win": {
+      "target": "portable"  
+	}
+  }
+}
+

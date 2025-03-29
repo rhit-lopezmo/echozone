@@ -18,14 +18,25 @@ import (
 )
 
 const (
-	envFilename  = ".env"
-	tokenFile    = "token.json"
-	redirectURL  = "http://localhost:8080/oauth2callback"
+	envFilename = ".env"
+	tokenFile = "token.json"
+	redirectURL = "http://localhost:8080/oauth2callback"
 )
 
 func main() {
-	client, ctx := setupClientAndContext()
-	ClientAPI.LoadPlaylistInfo(client, ctx)
+	args := os.Args
+
+	if len(args) < 2 {
+		fmt.Println("no args provided. try 'echozone-cmd.exe LoadPlaylistInfo'")	
+		return
+	}
+
+	cmd := args[1]
+
+	if cmd == "LoadPlaylistInfo" {
+		client, ctx := setupClientAndContext()
+		ClientAPI.LoadPlaylistInfo(client, ctx)
+	}
 }
 
 func setupClientAndContext() (*http.Client, context.Context) {

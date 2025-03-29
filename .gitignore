@@ -3,3 +3,8 @@ token.json
 
 # dist
 /dist/
+
+# js stuff
+package.json.lock
+node_modules/
+jsconfig.json
