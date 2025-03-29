@@ -14,8 +14,8 @@ edition = "2021"
 name = "echozone_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
-[build-dependencies]
 tauri-build = { version = "2", features = [] }
+[build-dependencies]
 
 [dependencies]
 tauri = { version = "2", features = [] }
