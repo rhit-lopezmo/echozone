@@ -22,8 +22,8 @@ build-linux-gui:
 
 # Build GUI for Windows
 build-windows-gui:
-	GOOS=windows GOARCH=amd64 go build -ldflags="-H=windowsgui" -o $(OUT_DIR)/$(GUI_NAME).exe ./src/gui
-	
+	GOOS=windows GOARCH=amd64 go build -o $(OUT_DIR)/$(GUI_NAME) ./src/gui
+
 # Clean all builds
 clean:
 	rm -rf $(OUT_DIR)

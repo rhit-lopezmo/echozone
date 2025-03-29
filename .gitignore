@@ -1,11 +1,33 @@
 # Go build artifacts
-/dist/
+*.exe
+*.out
+*.test
+*.dll
+*.so
+*.dylib
 
-# OAuth2
+# Go workspace and module cache (safe to ignore locally)
+bin/
+/pkg/
+!pkg/**/
+
+# Wails build output
+wails/build/
+wails/bin/
+wails/frontend/node_modules/
+wails/.wails/
+
+# System/IDE-specific files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# tokens
 token.json
 
-# .env
-.env
-
-# OS junk
-.DS_Store
+# OS-specific
+*.swp
+*.swo
+*~
+*.bak
