@@ -5,6 +5,6 @@ token.json
 /dist/
 
 # js stuff
-package.json.lock
+package-lock.json
 node_modules/
 jsconfig.json
