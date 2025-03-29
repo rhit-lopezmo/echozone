@@ -1,51 +1,61 @@
-import { useState } from "preact/hooks";
-import preactLogo from "./assets/preact.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { useEffect } from 'preact/hooks'
+import './App.css' // or remove if you're ditching styles
+	import { getCurrentWindow } from '@tauri-apps/api/window';
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+	useEffect(() => {
+		// Find the DOM element that you want to stop double-clicks on
+		const titlebar = document.querySelector(".titlebar");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+		if (titlebar) {
+			// Add an event listener for double-clicks
+			titlebar.addEventListener("dblclick", (e) => {
+				e.preventDefault();     // Stop any default browser behavior
+				e.stopPropagation();    // Stop it from bubbling up to other handlers
+			});
+		}
 
-  return (
-    <main class="container">
-      <h1>Welcome to Tauri + Preact</h1>
+		// Cleanup function: remove the event listener when the component unmounts
+		return () => {
+			if (titlebar) {
+				titlebar.removeEventListener("dblclick", () => {});
+			}
+		};
+	}, []); // Empty array = only run once on mount
 
-      <div class="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://preactjs.com" target="_blank">
-          <img src={preactLogo} class="logo preact" alt="Preact logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and Preact logos to learn more.</p>
+	const appWindow = getCurrentWindow();
 
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onInput={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
-  );
+	function minimize() {
+		appWindow.minimize()
+		.then(() => {
+			console.log("minimizing...");
+		})
+		.catch(err => {
+			console.error(`error when minimizing: ${err}`);
+		});
+	}
+
+	function close() {
+		appWindow.close()
+		.then(() => {
+			console.log("closing...");
+		})
+		.catch(err => {
+			console.error(`error when closing: ${err}`);
+		});
+	}
+
+	return (
+		<div class="app">
+			<div class="titlebar">
+				<span class="title">echozone</span>
+				<div class="window-buttons">
+					<button onClick={() => minimize()}>_</button>
+					<button onClick={() => close()}>X</button>
+				</div>
+			</div>
+		</div>
+	)
 }
 
-export default App;
+export default App

@@ -12,9 +12,14 @@
   "app": {
     "windows": [
       {
+		"label": "player",
         "title": "echozone",
-        "width": 800,
-        "height": 600
+        "width": 825,
+        "height": 500,
+		"resizable": false,
+		"fullscreen": false,
+		"decorations": false,
+		"transparent": true
       }
     ],
     "security": {
