@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 
-const echozonePath = "../../dist/echozone-cmd.exe";
+const echozonePath = "../../dist/echozone-cmd";
 
 function play() {
   const cmd = `${echozonePath} LoadPlaylistInfo` 

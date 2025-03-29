@@ -16,7 +16,7 @@ function createWindow() {
 	mainWindow.loadFile(path.join(__dirname, "index.html"));
 
 	// Optional: Uncomment to open DevTools
-	// mainWindow.webContents.openDevTools();
+	mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);

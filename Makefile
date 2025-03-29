@@ -11,6 +11,9 @@ build: build-windows
 build-windows:
 	GOOS=windows GOARCH=amd64 go build -o $(OUT_DIR)/$(CLI_NAME).exe ./src/cmd
 
+build-linux:
+	GOOS=linux GOARCH=amd64 go build -o $(OUT_DIR)/$(CLI_NAME) ./src/cmd
+
 # Clean all builds
 clean:
 	rm -rf $(OUT_DIR)
