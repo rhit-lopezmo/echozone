@@ -3,6 +3,7 @@ import './App.css';
 import PlayerPanel from './PlayerPanel';
 import EqualizerPanel from './EqualizerPanel';
 import PlaylistPanel from './PlaylistPanel';
+import ContextMenu from './ContextMenu';
 import { onTopPanelChange } from './DraggablePanel';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
 
   return (
     <div class="app">
+			<ContextMenu />
       <div class="panel-container">
         <PlayerPanel isTop={topPanelId === 'player'} />
         <EqualizerPanel isTop={topPanelId === 'eq'} />
