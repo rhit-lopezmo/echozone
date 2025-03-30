@@ -1,61 +1,74 @@
-import { useEffect } from 'preact/hooks'
-import './App.css' // or remove if you're ditching styles
-	import { getCurrentWindow } from '@tauri-apps/api/window';
+import { useState, useEffect } from 'preact/hooks'
+import './App.css'
+import DraggablePanel from './DraggablePanel'
+import { getCurrentWindow } from '@tauri-apps/api/window'
 
 function App() {
-	useEffect(() => {
-		// Find the DOM element that you want to stop double-clicks on
-		const titlebar = document.querySelector(".titlebar");
+  const [topPanelId, setTopPanelId] = useState('player') // ✅ MOVED OUTSIDE useEffect
+  const appWindow = getCurrentWindow()
 
-		if (titlebar) {
-			// Add an event listener for double-clicks
-			titlebar.addEventListener("dblclick", (e) => {
-				e.preventDefault();     // Stop any default browser behavior
-				e.stopPropagation();    // Stop it from bubbling up to other handlers
-			});
-		}
+  useEffect(() => {
+    const titlebar = document.querySelector(".titlebar")
+    if (titlebar) {
+      titlebar.addEventListener("dblclick", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+      })
+    }
 
-		// Cleanup function: remove the event listener when the component unmounts
-		return () => {
-			if (titlebar) {
-				titlebar.removeEventListener("dblclick", () => {});
-			}
-		};
-	}, []); // Empty array = only run once on mount
+    const updateTop = () => {
+      const panels = document.querySelectorAll('.draggable-panel')
+      let topId = ''
+      let maxZ = -1
+      panels.forEach(panel => {
+        const z = parseInt(getComputedStyle(panel).zIndex || '0')
+        if (z > maxZ) {
+          maxZ = z
+          topId = panel.getAttribute('data-panel-id') || ''
+        }
+      })
+      if (topId) setTopPanelId(topId)
+    }
 
-	const appWindow = getCurrentWindow();
+    document.addEventListener('mousedown', updateTop)
 
-	function minimize() {
-		appWindow.minimize()
-		.then(() => {
-			console.log("minimizing...");
-		})
-		.catch(err => {
-			console.error(`error when minimizing: ${err}`);
-		});
-	}
+    return () => {
+      if (titlebar) {
+        titlebar.removeEventListener("dblclick", () => {})
+        document.removeEventListener('mousedown', updateTop)
+      }
+    }
+  }, [])
 
-	function close() {
-		appWindow.close()
-		.then(() => {
-			console.log("closing...");
-		})
-		.catch(err => {
-			console.error(`error when closing: ${err}`);
-		});
-	}
+  function minimize() {
+    appWindow.minimize().catch(err =>
+      console.error(`error when minimizing: ${err}`)
+    )
+  }
 
-	return (
-		<div class="app">
-			<div class="titlebar">
-				<span class="title">echozone</span>
-				<div class="window-buttons">
-					<button onClick={() => minimize()}>_</button>
-					<button onClick={() => close()}>X</button>
-				</div>
-			</div>
-		</div>
-	)
+  function close() {
+    appWindow.close().catch(err =>
+      console.error(`error when closing: ${err}`)
+    )
+  }
+
+  return (
+    <div class="app">
+      <div class="panel-container">
+        <DraggablePanel id="player" title="Player" defaultOrder={0} isTop={topPanelId === 'player'}>
+          Player content
+        </DraggablePanel>
+
+        <DraggablePanel id="eq" title="Equalizer" defaultOrder={1} isTop={topPanelId === 'eq'}>
+          Equalizer content
+        </DraggablePanel>
+
+        <DraggablePanel id="playlist" title="Playlist" defaultOrder={2} isTop={topPanelId === 'playlist'}>
+          Playlist content
+        </DraggablePanel>
+      </div>
+    </div>
+  )
 }
 
 export default App

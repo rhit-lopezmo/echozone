@@ -14,8 +14,8 @@
       {
 		"label": "player",
         "title": "echozone",
-        "width": 825,
-        "height": 500,
+        "width": 720,
+        "height": 900,
 		"resizable": false,
 		"fullscreen": false,
 		"decorations": false,
