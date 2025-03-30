@@ -4,7 +4,7 @@ import DraggablePanel from './DraggablePanel'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 
 function App() {
-  const [topPanelId, setTopPanelId] = useState('player') // ✅ MOVED OUTSIDE useEffect
+  const [topPanelId, setTopPanelId] = useState('player')
   const appWindow = getCurrentWindow()
 
   useEffect(() => {
@@ -31,6 +31,7 @@ function App() {
     }
 
     document.addEventListener('mousedown', updateTop)
+		updateTop() // 🟢 <-- this triggers topPanelId after mount
 
     return () => {
       if (titlebar) {
