@@ -13,6 +13,7 @@ interface DraggablePanelProps {
 
 const panelRegistry: Record<string, { el: HTMLElement; order: number; z: number }> = {};
 let zIndexCounter = 1000;
+let notifyTopPanelChange: ((id: string) => void) | null = null;
 
 export default function DraggablePanel({
   id,
@@ -35,13 +36,13 @@ export default function DraggablePanel({
       } catch {}
     }
 
-    panelRegistry[id] = { el, order, z: 0 };
+    panelRegistry[id] = { el, order, z: ++zIndexCounter };
     updateLayout();
 
     const focusPanel = () => {
       const z = ++zIndexCounter;
-      el.style.zIndex = z.toString();
       panelRegistry[id].z = z;
+      updateLayout();
     };
 
     el.addEventListener('mousedown', focusPanel);
@@ -73,11 +74,10 @@ export default function DraggablePanel({
             for (const [otherId, { el: otherEl }] of Object.entries(panelRegistry)) {
               if (otherId === id) continue;
               const otherBounds = otherEl.getBoundingClientRect();
-              const isOverlapping =
-                draggedBounds.bottom > otherBounds.top &&
-                draggedBounds.top < otherBounds.bottom;
+              const overlapHeight = Math.min(draggedBounds.bottom, otherBounds.bottom) - Math.max(draggedBounds.top, otherBounds.top);
+              const minRequiredOverlap = otherBounds.height * 0.25;
 
-              if (isOverlapping) {
+              if (overlapHeight > minRequiredOverlap) {
                 const thisOrder = panelRegistry[id].order;
                 const thatOrder = panelRegistry[otherId].order;
 
@@ -92,6 +92,9 @@ export default function DraggablePanel({
             }
 
             updateLayout();
+						target.classList.add('just-swapped');
+						setTimeout(() => target.classList.remove('just-swapped'), 300);
+
           },
         },
       })
@@ -115,13 +118,19 @@ export default function DraggablePanel({
     >
       <div class="titlebar">
         <span class="title-text">{title}</span>
-        {isTop && (
-          <div class="titlebar-icons">
-            <div class="move-window-icon" data-tauri-drag-region title="Move Window">⠿&nbsp;</div>
-            <button class="window-btn" onClick={minimize}>_</button>
-            <button class="window-btn" onClick={close}>✕</button>
-          </div>
-        )}
+        <div class="titlebar-icons">
+          {isTop ? (
+            <>
+              <div class="move-window-icon" data-tauri-drag-region title="Move Window">⠿</div>
+              <div class="toolbar-separator"></div>
+              <button class="window-btn" onClick={minimize}>⎯</button>
+              <div class="toolbar-separator"></div>
+              <button class="window-btn" onClick={close}>✕</button>
+            </>
+          ) : (
+            <div style="width: 96px;" />
+          )}
+        </div>
       </div>
       <div class="panel-content">{children}</div>
     </div>
@@ -133,6 +142,9 @@ function updateLayout() {
   const panelCount = sortedPanels.length;
   const heightPerPanel = 100 / panelCount;
 
+  let topId = '';
+  let topZ = -1;
+
   sortedPanels.forEach(([id, { el, z }], index) => {
     const top = `${index * heightPerPanel}vh`;
     el.style.transform = `translateY(0)`;
@@ -142,5 +154,18 @@ function updateLayout() {
     el.style.zIndex = z.toString();
     panelRegistry[id].order = index;
     localStorage.setItem(`panel-order-${id}`, index.toString());
+
+    if (z > topZ) {
+      topZ = z;
+      topId = id;
+    }
   });
+
+  if (notifyTopPanelChange && topId) {
+    notifyTopPanelChange(topId);
+  }
+}
+
+export function onTopPanelChange(callback: (id: string) => void) {
+  notifyTopPanelChange = callback;
 }

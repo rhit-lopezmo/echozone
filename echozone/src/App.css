@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'PressStart2P';
+  src: url('/assets/fonts/PressStart2P-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* === Global Resets === */
 html, body {
   height: 100%;
@@ -6,11 +14,12 @@ html, body {
 }
 
 .app {
+	border-radius: 10px;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
   position: relative;
-  background: #111;
+  background: url('/cool-angel-girl.jpg');
 }
 
 /* === Panel Styles === */
@@ -20,22 +29,25 @@ html, body {
   z-index: 1000;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: transparent; 
+	 /* rgba(255, 255, 255, 0.05); */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  /* backdrop-filter: blur(12px) saturate(180%); */
+  /* -webkit-backdrop-filter: blur(12px) saturate(180%); */
   font-family: 'Segoe UI', 'Arial', sans-serif;
   font-size: 16px;
-  color: #e0f7ff;
+  /* color: #e0f7ff; */
+	color: black;
   user-select: none;
   overflow: hidden;
   transition: box-shadow 0.3s ease, border 0.3s ease;
+	transition: top 300ms ease, transform 100ms ease;
 }
 
 .draggable-panel[data-active='true'],
 .draggable-panel:focus-within {
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-  border: 1px solid rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 /* === Title Bar === */
@@ -44,43 +56,60 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
+	padding-right: 0;
   height: 40px;
-  background: linear-gradient(to right, rgba(0, 255, 255, 0.15), rgba(0, 255, 255, 0.05));
-  color: #00ffff;
+	background: linear-gradient(ghostwhite, rgb(255 255 255 / 25%), rgb(0 0 0 / 10%));
+  /* color: #00ffff; */
+	color: #333;
+	text-align: center;
+	font-family: 'PressStart2P';
   font-weight: bold;
   font-size: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0 0 4px #00ffff;
+  /* text-shadow: 0px 0px 3px #555; */
   cursor: grab;
   -webkit-app-region: no-drag;
   user-select: none;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 20px;
+  background: linear-gradient(to bottom,
+    rgba(255, 255, 255, 0.15),
+    rgba(0, 0, 0, 0.4)
+  );
+  margin: 0 2px;
 }
 
 .titlebar-icons {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
+  /* margin-left: auto; */
 }
 
 .move-window-icon {
-  font-size: 1.25rem;
-  cursor: grab;
-  color: #00ffff;
-  text-shadow: 0 0 4px #00ffff;
+  font-size: 1.5rem;
   user-select: none;
   -webkit-app-region: drag;
+  cursor: pointer;
+  transition: color 0.2s;
+	width: 60px;
+}
+
+.move-window-icon:hover {
+  color: #ff0066;
+  text-shadow: 0 0 3px #cc0033;
 }
 
 .window-btn {
   background: transparent;
   border: none;
-  color: #00ffff;
-  font-size: 1rem;
-  padding: 2px 6px;
+  font-size: 1.15rem;
   cursor: pointer;
-  text-shadow: 0 0 4px #00ffff;
+	text-align: center;
   transition: color 0.2s;
+	width: 60px;
 }
 
 .window-btn:hover {
@@ -91,8 +120,24 @@ html, body {
 /* === Panel Content === */
 .panel-content {
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.4);
-  border-top: 1px solid #333;
+  background: transparent;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
   height: calc(100% - 48px);
   overflow-y: auto;
 }
+
+@keyframes shrink-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.draggable-panel.just-swapped {
+  animation: shrink-pop 450ms ease;
+}
+

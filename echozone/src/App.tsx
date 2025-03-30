@@ -3,29 +3,16 @@ import './App.css';
 import PlayerPanel from './PlayerPanel';
 import EqualizerPanel from './EqualizerPanel';
 import PlaylistPanel from './PlaylistPanel';
+import { onTopPanelChange } from './DraggablePanel';
 
 function App() {
   const [topPanelId, setTopPanelId] = useState('player');
 
   useEffect(() => {
-    const updateTop = () => {
-      const panels = document.querySelectorAll('.draggable-panel');
-      let topId = '';
-      let maxZ = -1;
-      panels.forEach(panel => {
-        const z = parseInt(getComputedStyle(panel).zIndex || '0');
-        if (z > maxZ) {
-          maxZ = z;
-          topId = panel.getAttribute('data-panel-id') || '';
-        }
-      });
-      if (topId) setTopPanelId(topId);
-    };
-
-    document.addEventListener('mousedown', updateTop);
-    updateTop();
-
-    return () => document.removeEventListener('mousedown', updateTop);
+    // Register the callback for whenever layout updates
+    onTopPanelChange((topId) => {
+      setTopPanelId(topId);
+    });
   }, []);
 
   return (
@@ -40,3 +27,4 @@ function App() {
 }
 
 export default App;
+
