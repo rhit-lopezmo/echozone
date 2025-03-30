@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'preact/hooks';
 import interact from 'interactjs';
-import type { ComponentChildren, FunctionalComponent } from 'preact';
+import { getCurrentWindow } from '@tauri-apps/api/window';
+import type { ComponentChildren } from 'preact';
 
 interface DraggablePanelProps {
   id: string;
@@ -13,13 +14,13 @@ interface DraggablePanelProps {
 const panelRegistry: Record<string, { el: HTMLElement; order: number; z: number }> = {};
 let zIndexCounter = 1000;
 
-const DraggablePanel: FunctionalComponent<DraggablePanelProps> = ({
+export default function DraggablePanel({
   id,
   title,
   children,
   defaultOrder,
   isTop = false,
-}) => {
+}: DraggablePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -102,25 +103,30 @@ const DraggablePanel: FunctionalComponent<DraggablePanelProps> = ({
     };
   }, [id, defaultOrder]);
 
+  const minimize = () => getCurrentWindow().minimize();
+  const close = () => getCurrentWindow().close();
+
   return (
     <div
       ref={panelRef}
       class="draggable-panel"
       data-panel-id={id}
-      style={{
-        position: 'absolute',
-        width: '100vw',
-        left: '0',
-      }}
+      style={{ position: 'absolute', width: '100vw', left: '0' }}
     >
       <div class="titlebar">
-        <span>{title}</span>
-        {isTop && <div class="move-window-icon" data-tauri-drag-region>⠿</div>}
+        <span class="title-text">{title}</span>
+        {isTop && (
+          <div class="titlebar-icons">
+            <div class="move-window-icon" data-tauri-drag-region title="Move Window">⠿&nbsp;</div>
+            <button class="window-btn" onClick={minimize}>_</button>
+            <button class="window-btn" onClick={close}>✕</button>
+          </div>
+        )}
       </div>
       <div class="panel-content">{children}</div>
     </div>
   );
-};
+}
 
 function updateLayout() {
   const sortedPanels = Object.entries(panelRegistry).sort((a, b) => a[1].order - b[1].order);
@@ -138,5 +144,3 @@ function updateLayout() {
     localStorage.setItem(`panel-order-${id}`, index.toString());
   });
 }
-
-export default DraggablePanel;
