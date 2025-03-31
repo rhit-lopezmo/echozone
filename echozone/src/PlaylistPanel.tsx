@@ -23,19 +23,23 @@ export default function PlaylistPanel({ isTop, onLoadVideo }: { isTop: boolean, 
 
   return (
     <DraggablePanel id="playlist" title="Playlist" defaultOrder={2} isTop={isTop}>
+			<div class="playlist-container">
+			<div class="placeholder"></div>
       <input
+				class="frosty-input"
         type="text"
         value={url}
-        placeholder="Paste YouTube link..."
+        placeholder="link goes here"
         onInput={(e: any) => setUrl(e.target.value)}
       />
-      <button onClick={() => {
+      <button class="frosty-btn" onClick={() => {
         const id = extractVideoId(url);
         if (id) {
           onLoadVideo(id);
           setUrl('');
         }
-      }}>Load Video</button>
+      }}>Load Playlist</button>
+			</div>
     </DraggablePanel>
   );
 }

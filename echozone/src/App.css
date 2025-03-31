@@ -415,3 +415,93 @@ html, body {
   pointer-events: auto; /* 👈 critical: blocks hover to iframe */
 
 }
+
+/* === Playlist == */
+
+.frosty-btn {
+  font-family: var(--main-font);
+  font-size: 0.85rem;
+  padding: 15px 10px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  color: #000;
+  text-shadow: 0 0 1px #fff;
+  backdrop-filter: blur(5px) brightness(1.1);
+  -webkit-backdrop-filter: blur(6px) brightness(1.1);
+  /* box-shadow: */
+  /*   inset 0 1px 1px rgba(0, 0, 0, 0.3), */
+  /*   1px 1px 8px rgba(0, 0, 0, 0.1); */
+  transition: all 120ms ease-in-out;
+  cursor: pointer;
+  user-select: none;
+	max-width: 60%;
+}
+
+.frosty-btn:hover {
+  border: 2px solid rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    0 0 12px rgba(255, 255, 255, 0.4);
+  transform: scale(1.03);
+}
+
+.frosty-btn:active {
+  border: 2px solid rgba(0, 0, 0, 0.35);
+  transform: translateY(1px);
+	transition: transform 2ms;
+}
+
+.frosty-input {
+  font-family: var(--sub-font);
+	text-align: center;
+  font-size: 0.85rem;
+  padding: 12px 50px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  color: #000;
+  text-shadow: 0 0 1px #fff;
+  backdrop-filter: blur(5px) brightness(1.1);
+  -webkit-backdrop-filter: blur(6px) brightness(1.1);
+  transition: all 120ms ease-in-out;
+  outline: none;
+	max-height: 25%;
+  max-width: 80%;
+  box-sizing: border-box;
+}
+
+.frosty-input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+  text-shadow: none;
+}
+
+.frosty-input:hover {
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    0 0 10px rgba(255, 255, 255, 0.35);
+  transform: scale(1.02);
+}
+
+.frosty-input:focus {
+  border-color: rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 12px rgba(255, 255, 255, 0.45),
+    inset 0 0 2px rgba(0, 0, 0, 0.25);
+  transform: scale(1.03);
+}
+
+
+.playlist-container {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.placeholder {
+	flex-basis: 10%;
+}
