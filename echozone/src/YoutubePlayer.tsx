@@ -10,6 +10,7 @@ export default function YouTubePlayer({
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<any>(null);
+  const titleSetRef = useRef(false);
   const [started, setStarted] = useState(false);
 
   // Only load YouTube player once started
@@ -19,7 +20,6 @@ export default function YouTubePlayer({
     const baseUrl = "https://www.youtube.com/embed/";
     const params = new URLSearchParams({
       enablejsapi: "1",
-      // mute: "1",
       loop: "1",
       playlist: videoId,
       modestbranding: "1",
@@ -33,17 +33,29 @@ export default function YouTubePlayer({
 
     const onPlayerReady = () => {
       playerRef.current = player;
-      player.unMute();        // ✅ Unmute now that interaction happened
+      player.unMute();
       player.playVideo();
+    };
 
-      const videoData = (player as any).getVideoData();
-      onTitleChange?.(videoData.title);
+    const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
+      if (
+        !titleSetRef.current &&
+        event.data === YT.PlayerState.PLAYING &&
+        playerRef.current
+      ) {
+        const videoData = playerRef.current.getVideoData();
+        if (videoData?.title) {
+          titleSetRef.current = true;
+          onTitleChange?.(videoData.title);
+        }
+      }
     };
 
     const onYouTubeIframeAPIReady = () => {
       player = new window.YT.Player(iframeRef.current!, {
         events: {
           onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
         },
       });
     };
@@ -112,7 +124,12 @@ export default function YouTubePlayer({
 
   return (
     <div class="iframe-wrapper">
-      <div class="aspect-box" onClick={handleStart} onKeyDown={handleStart} tabIndex={0}>
+      <div
+        class="aspect-box"
+        onClick={handleStart}
+        onKeyDown={handleStart}
+        tabIndex={0}
+      >
         {started && (
           <iframe
             ref={iframeRef}
