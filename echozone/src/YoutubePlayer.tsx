@@ -32,7 +32,7 @@ export default function YouTubePlayer({
       playerRef.current = player;
       player.playVideo();
 
-      const videoData = player.getVideoData();
+			const videoData = (player as any).getVideoData();
       onTitleChange?.(videoData.title);
     };
 

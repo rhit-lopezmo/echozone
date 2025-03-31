@@ -169,6 +169,7 @@ export default function DraggablePanel({
         </div>
       </div>
       <div class="panel-content">{children}</div>
+			<div class="panel-shimmer" />
     </div>
   );
 }

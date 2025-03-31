@@ -1,0 +1,34 @@
+identifier = "window-control"
+description = "Allow default window control"
+windows = ["player"]
+
+# Broad permissions granted to the application
+permissions = [
+  "core:default",
+  "core:window:default",
+  "core:window:allow-minimize",
+  "core:window:allow-close",
+  "core:window:allow-start-dragging",
+  "core:window:allow-set-always-on-top",
+  "fs:allow-appconfig-write-recursive",  # Allows recursive write access to the AppConfig directory
+  "fs:allow-appconfig-read",             # Allows read access to the AppConfig directory
+]
+
+# Detailed file system plugin permissions
+[fs]
+mkdir = true
+readDir = true
+readFile = true
+appConfig = { writeRecursive = true, read = true }
+
+# Core permissions
+[core]
+default = true
+
+[core.window]
+default = true
+allowMinimize = true
+allowClose = true
+allowStartDragging = true
+allowSetAlwaysOnTop = true
+

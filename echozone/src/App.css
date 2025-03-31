@@ -68,7 +68,7 @@ html, body {
   left: 0;
   width: 100%;
 	height: 100%;
-  z-index: 3;
+  z-index: 10;
   pointer-events: none;
 
   background-image: repeating-linear-gradient(
@@ -89,7 +89,7 @@ html, body {
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
+  z-index: 11;
   pointer-events: none;
 
   background-image: url('/assets/noise.png');
@@ -209,24 +209,47 @@ html, body {
   transition: max-width 200ms ease;
 }
 
-.title-text::before {
-	cursor: pointer;
-  content: '';
+/* .title-text::before { */
+/* 	cursor: pointer; */
+/*   content: ''; */
+/*   position: absolute; */
+/*   top: 0; */
+/*   left: -100%; */
+/*   height: 100%; */
+/*   width: 100%; */
+/*   background: linear-gradient( */
+/*     120deg, */
+/*     transparent 0%, */
+/*     rgba(255, 255, 255, 0.2) 40%, */
+/*     rgba(255, 255, 255, 0.5) 50%, */
+/*     rgba(255, 255, 255, 0.2) 60%, */
+/*     transparent 100% */
+/*   ); */
+/*   animation: streak-slide 5s infinite ease-in-out; */
+/* } */
+
+.panel-shimmer {
   position: absolute;
+	z-index: 3;
   top: 0;
   left: -100%;
   height: 100%;
   width: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.2) 40%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0.2) 60%,
-    transparent 100%
-  );
+  pointer-events: none;
+	background: linear-gradient(
+	120deg,
+	transparent 0%,
+	rgba(255, 255, 255, 0.08) 35%,
+	rgba(255, 255, 255, 0.35) 50%,
+	rgba(255, 255, 255, 0.08) 65%,
+	transparent 100%
+	);
+
   animation: streak-slide 5s infinite ease-in-out;
+  mix-blend-mode: screen;
+  border-radius: inherit;
 }
+
 
 @keyframes streak-slide {
   0% {
@@ -429,6 +452,7 @@ html, body {
 	position: relative;
   aspect-ratio: 3 / 4;
 	border-radius: 15%;
+	z-index: 4;
   box-shadow:
     inset 0 0 60px rgba(255, 255, 255, 0.25),
     inset 0 0 100px rgba(0, 0, 0, 0.15);
@@ -445,6 +469,7 @@ html, body {
 .aspect-box iframe {
 	position: relative;
 	flex: 1;
+	z-index: 5;
   width: 100%;
   height: 100%;
 }
@@ -455,7 +480,7 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  z-index: 6;
   background: transparent;
   pointer-events: auto; /* 👈 critical: blocks hover to iframe */
 
@@ -551,3 +576,75 @@ html, body {
 .placeholder {
 	flex-basis: 10%;
 }
+
+/* === Equalizer === */
+.equalizer-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 0; /* important for flex children */
+  font-family: var(--sub-font);
+}
+
+.preset-selector {
+  margin-bottom: 0.5rem;
+}
+
+.preset-selector select {
+  font-family: var(--sub-font);
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  height: 2rem; /* ✨ ensure height */
+  min-width: 120px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.sliders.vertical {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  height: 100px; /* ✨ slightly reduced */
+  padding: 0.5rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.slider {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+}
+
+
+.vertical-slider {
+  writing-mode: bt-lr; /* makes it vertical */
+  -webkit-appearance: slider-vertical;
+  width: 30px;
+	height: 100%;
+  background: transparent;
+  border-radius: 10px;
+	accent-color: #555;
+  cursor: pointer;
+}
+
+.vertical-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #555;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 0 2px rgba(255, 255, 255, 0.4),
+    inset 2px 2px 3px rgba(0, 0, 0, 0.6),
+    0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
