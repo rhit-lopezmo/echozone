@@ -1,7 +1,8 @@
-import { useRef, useEffect } from 'preact/hooks';
+import { useRef, useEffect, useState } from 'preact/hooks';
 import interact from 'interactjs';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import type { ComponentChildren } from 'preact';
+import { Minus, PushPinSimple, PushPinSimpleSlash } from 'phosphor-react';
 
 interface DraggablePanelProps {
   id: string;
@@ -23,6 +24,7 @@ export default function DraggablePanel({
   isTop = false,
 }: DraggablePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+	const [isPinned, setIsPinned] = useState(false);
 
   useEffect(() => {
     const el = panelRef.current;
@@ -109,6 +111,12 @@ export default function DraggablePanel({
   const minimize = () => getCurrentWindow().minimize();
   const close = () => getCurrentWindow().close();
 
+	const togglePin = async () => {
+		const win = getCurrentWindow();
+		await win.setAlwaysOnTop(!isPinned);
+		setIsPinned(!isPinned);
+	};
+
   return (
     <div
       ref={panelRef}
@@ -121,11 +129,25 @@ export default function DraggablePanel({
         <div class="titlebar-icons">
           {isTop ? (
             <>
-              <div class="move-window-icon" data-tauri-drag-region title="Move Window">⠿</div>
+              <div class="move-window-icon" data-tauri-drag-region>
+							  <div class="move-grab-cursor">⠿</div>
+							</div>
               <div class="toolbar-separator"></div>
-              <button class="window-btn" onClick={minimize}>⎯</button>
+							{isPinned ? (
+								<div class="window-btn" onClick={togglePin}>
+									<PushPinSimpleSlash weight="fill" size={18} color="000000" />
+								</div>
+							) : (
+								<div class="window-btn" onClick={togglePin}>
+									<PushPinSimple weight="fill" size={18} color="000000" />
+								</div>
+							)}
+							<div class="toolbar-separator"></div>
+							<div class="window-btn" onClick={minimize}>
+								<Minus weight="fill" size={18} color="000000" />
+							</div>
               <div class="toolbar-separator"></div>
-              <button class="window-btn" onClick={close}>✕</button>
+              <button class="window-btn" onClick={close}><strong>✕</strong></button>
             </>
           ) : (
             <div style="width: 96px;" />

@@ -11,15 +11,18 @@ html, body {
   height: 100%;
   margin: 0;
   overflow: hidden;
+	background: transparent;
 }
 
 .app {
 	border-radius: 10px;
+	/* clip-path: inset(0 round 10px); */
   height: 100vh;
   width: 100vw;
   overflow: hidden;
   position: relative;
-  background: url('/cool-angel-girl.jpg');
+  background: url('/dark-angel.png') no-repeat center center;
+	background-size: cover;
 	/* background: transparent; */	
 }
 
@@ -201,14 +204,13 @@ html, body {
   font-size: 1.5rem;
   user-select: none;
   -webkit-app-region: drag;
-  cursor: pointer;
-  transition: color 0.2s;
+  cursor: grab;
+  transition: transform 0.2s ease;
 	width: 60px;
 }
 
 .move-window-icon:hover {
-  color: #ff0066;
-  text-shadow: 0 0 3px #cc0033;
+	transform: scale(1.1);
 }
 
 .window-btn {
@@ -217,13 +219,22 @@ html, body {
   font-size: 1.15rem;
   cursor: pointer;
 	text-align: center;
-  transition: color 0.2s;
+  transition: transform 0.2s ease;
 	width: 60px;
 }
 
 .window-btn:hover {
-  color: #ff0066;
-  text-shadow: 0 0 6px #ff0066;
+  transform: scale(1.1);
+}
+
+.window-btn svg {
+  width: 1.25em;
+  height: 1.25em;
+  transition: transform 0.2s ease;
+}
+
+.window-btn:hover svg {
+  transform: scale(1.1);
 }
 
 /* === Panel Content === */

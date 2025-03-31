@@ -8,7 +8,13 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig(async () => ({
 	base: "./",
   plugins: [preact()],
-
+	resolve: {
+		alias: {
+			react: 'preact/compat',
+			'react-dom/test-utils': 'preact/test-utils',
+			'react-dom': 'preact/compat',
+		},
+	},
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent vite from obscuring rust errors
