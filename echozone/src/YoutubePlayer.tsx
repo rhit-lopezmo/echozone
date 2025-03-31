@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import CRTOverlay from './CRTOverlay';
 
 export default function YouTubePlayer({
@@ -10,13 +10,16 @@ export default function YouTubePlayer({
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<any>(null);
+  const [started, setStarted] = useState(false);
 
+  // Only load YouTube player once started
   useEffect(() => {
-    if (!videoId || !iframeRef.current) return;
+    if (!started || !videoId || !iframeRef.current) return;
 
     const baseUrl = "https://www.youtube.com/embed/";
     const params = new URLSearchParams({
       enablejsapi: "1",
+      // mute: "1",
       loop: "1",
       playlist: videoId,
       modestbranding: "1",
@@ -30,9 +33,10 @@ export default function YouTubePlayer({
 
     const onPlayerReady = () => {
       playerRef.current = player;
+      player.unMute();        // ✅ Unmute now that interaction happened
       player.playVideo();
 
-			const videoData = (player as any).getVideoData();
+      const videoData = (player as any).getVideoData();
       onTitleChange?.(videoData.title);
     };
 
@@ -56,10 +60,13 @@ export default function YouTubePlayer({
     return () => {
       player?.destroy();
     };
-  }, [videoId]);
+  }, [started, videoId]);
 
+  // Controls (spacebar, arrow keys, etc.)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!started) return;
+
       const player = playerRef.current;
       if (!player) return;
 
@@ -69,7 +76,12 @@ export default function YouTubePlayer({
           const state = player.getPlayerState();
           if (state === YT.PlayerState.PLAYING) {
             player.pauseVideo();
-          } else if (state === YT.PlayerState.PAUSED) {
+          } else if (
+            state === YT.PlayerState.PAUSED ||
+            state === YT.PlayerState.UNSTARTED ||
+            state === YT.PlayerState.ENDED
+          ) {
+            player.unMute();
             player.playVideo();
           }
           break;
@@ -92,17 +104,29 @@ export default function YouTubePlayer({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [started]);
+
+  const handleStart = () => {
+    setStarted(true); // ✅ Real user interaction
+  };
 
   return (
     <div class="iframe-wrapper">
-      <div class="aspect-box">
-        <iframe
-          ref={iframeRef}
-          style={{ border: 'none' }}
-          allow="autoplay; encrypted-media"
-        />
-        <div class="iframe-blocker" />
+      <div class="aspect-box" onClick={handleStart} onKeyDown={handleStart} tabIndex={0}>
+        {started && (
+          <iframe
+            ref={iframeRef}
+            style={{ border: 'none' }}
+            allow="autoplay; encrypted-media"
+          />
+        )}
+
+        {!started && (
+          <div class="start-screen">
+            <div class="start-prompt">CLICK TO START ECHOZONE</div>
+          </div>
+        )}
+
         <CRTOverlay />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { RenderableProps } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import DraggablePanel from './DraggablePanel';
-import { readDir, readTextFile, writeTextFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { readDir, readTextFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { join } from '@tauri-apps/api/path';
 
 const eqBands = [
