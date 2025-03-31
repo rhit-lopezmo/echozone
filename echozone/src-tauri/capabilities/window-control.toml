@@ -15,7 +15,7 @@ permissions = [
 ]
 
 # Detailed file system plugin permissions
-[fs]
+[plugins.fs]
 mkdir = true
 readDir = true
 readFile = true
