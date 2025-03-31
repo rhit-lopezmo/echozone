@@ -6,6 +6,37 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'RealityHyper';
+  src: url('/assets/fonts/Reality Hyper Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Xirod';
+  src: url('/assets/fonts/Xirod.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Interphases Pro Mono Trial Regular';
+  src: url('/assets/fonts/TT Interphases Pro Mono Trial Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --main-font: 'Xirod', 'Segoe UI', Arial, sans-serif;
+	--main-font-size: 1.1em;
+	--sub-font: 'TT Interphases Pro Mono Trial Regular', Arial, sans-serif;
+	--sub-font-size: 1rem;
+}
+
 /* === Global Resets === */
 html, body {
   height: 100%;
@@ -86,9 +117,8 @@ html, body {
   height: 100%;
   width: 100%;
   position: relative;
-  z-index: 1; /* must be LOWER than CRTOverlay (z-index: 9999) */
+  z-index: 1; 
 }
-
 
 .draggable-panel {
 	display: flex;
@@ -103,8 +133,8 @@ html, body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   /* backdrop-filter: blur(12px) saturate(180%); */
   /* -webkit-backdrop-filter: blur(12px) saturate(180%); */
-  font-family: 'Segoe UI', 'Arial', sans-serif;
-  font-size: 16px;
+  font-family: var(--sub-font);
+	font-size: var(--sub-font-size);
   /* color: #e0f7ff; */
 	color: black;
   user-select: none;
@@ -131,7 +161,7 @@ html, body {
   /* color: #00ffff; */
 	color: #333;
 	text-align: center;
-	font-family: 'PressStart2P';
+	font-family: var(--main-font);
   font-weight: bold;
   font-size: 1rem;
   /* text-shadow: 0px 0px 3px #555; */
@@ -139,6 +169,10 @@ html, body {
   -webkit-app-region: no-drag;
   user-select: none;
 	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.title-text {
+	font-size: var(--main-font-size);
 }
 
 .title-text::before {
