@@ -1,6 +1,9 @@
 # tokens
 token.json
 
+# cookies
+*cookies*
+
 # dist
 /dist/
 
