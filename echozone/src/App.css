@@ -20,11 +20,76 @@ html, body {
   overflow: hidden;
   position: relative;
   background: url('/cool-angel-girl.jpg');
-	/* background: transparent; */
+	/* background: transparent; */	
+}
+
+.crt-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+	height: 100%;
+  z-index: 3;
+  pointer-events: none;
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.12) 0px,
+    rgba(255, 255, 255, 0.12) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+
+  animation: move-scanlines 0.5s linear infinite;
+  mix-blend-mode: screen;
+}
+
+.crt-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+
+  background-image: url('/assets/noise.png');
+  background-size: cover;
+  opacity: 0.17;
+  mix-blend-mode: screen;
+
+  animation: noiseShift 0.3s infinite;
+}
+
+@keyframes noiseShift {
+  0%   { background-position: 0 0; }
+  25%  { background-position: -5px 3px; }
+  50%  { background-position: 3px -4px; }
+  75%  { background-position: -2px 2px; }
+  100% { background-position: 0 0; }
+}
+
+@keyframes move-scanlines {
+  from {
+    background-position-y: 0;
+  }
+  to {
+    background-position-y: 4px;
+  }
 }
 
 /* === Panel Styles === */
+.panel-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  z-index: 1; /* must be LOWER than CRTOverlay (z-index: 9999) */
+}
+
+
 .draggable-panel {
+	display: flex;
+	flex-direction: column;
   position: absolute;
   width: 300px;
   z-index: 1000;
@@ -74,6 +139,7 @@ html, body {
 }
 
 .title-text::before {
+	cursor: pointer;
   content: '';
   position: absolute;
   top: 0;
@@ -162,11 +228,12 @@ html, body {
 
 /* === Panel Content === */
 .panel-content {
+	flex: 1;
   padding: 1rem;
   background: transparent;
   background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
-  height: calc(100% - 48px);
-  overflow-y: auto;
+  /* height: calc(100% - 48px); */
+  overflow-y: hidden;
 }
 
 /* === Animation === */
@@ -248,3 +315,49 @@ html, body {
     inset -2px -2px 2px rgba(255, 255, 255, 0.6);
 }
 
+/* === iFrames === */
+.iframe-wrapper {
+	display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.aspect-box {
+	position: relative;
+  aspect-ratio: 3 / 4;
+	border-radius: 10%;
+  box-shadow:
+    inset 0 0 60px rgba(255, 255, 255, 0.25),
+    inset 0 0 100px rgba(0, 0, 0, 0.15);
+	/* width: auto; */
+	/* height: auto; */
+	width: 241px;
+	height: 163px;
+	/* min-width: 35%; */
+  /* max-height: 75%; */
+  overflow: hidden;
+  background: black;
+}
+
+.aspect-box iframe {
+	position: relative;
+	flex: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.iframe-blocker {
+	position: absolute;
+	top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background: transparent;
+  pointer-events: auto; /* 👈 critical: blocks hover to iframe */
+
+}

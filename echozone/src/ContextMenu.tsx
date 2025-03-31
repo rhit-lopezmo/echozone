@@ -9,7 +9,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { label: 'Reload', action: () => window.location.reload() },
   { label: 'Mute', action: () => console.log('Mute clicked') },
-  { label: 'Close', action: () => getCurrentWindow().close() }
+  { label: 'Close', action: () => getCurrentWindow().close() },
 ];
 
 export default function ContextMenu() {

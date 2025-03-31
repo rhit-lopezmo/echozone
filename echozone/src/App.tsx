@@ -8,6 +8,7 @@ import { onTopPanelChange } from './DraggablePanel';
 
 function App() {
   const [topPanelId, setTopPanelId] = useState('player');
+	const [videoId, setVideoId] = useState('');
 
   useEffect(() => {
     // Register the callback for whenever layout updates
@@ -20,9 +21,9 @@ function App() {
     <div class="app">
 			<ContextMenu />
       <div class="panel-container">
-        <PlayerPanel isTop={topPanelId === 'player'} />
+        <PlayerPanel isTop={topPanelId === 'player'} videoId={videoId}/>
         <EqualizerPanel isTop={topPanelId === 'eq'} />
-        <PlaylistPanel isTop={topPanelId === 'playlist'} />
+        <PlaylistPanel isTop={topPanelId === 'playlist'} onLoadVideo={setVideoId}/>
       </div>
     </div>
   );
