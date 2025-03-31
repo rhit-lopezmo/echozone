@@ -6,7 +6,7 @@ import { Minus, PushPinSimple, PushPinSimpleSlash } from 'phosphor-react';
 
 interface DraggablePanelProps {
   id: string;
-  title: string;
+  title: string | ComponentChildren;
   children: ComponentChildren;
   defaultOrder: number;
   isTop?: boolean;
@@ -95,7 +95,15 @@ export default function DraggablePanel({
 
             updateLayout();
 						target.classList.add('just-swapped');
-						setTimeout(() => target.classList.remove('just-swapped'), 300);
+
+						setTimeout(() => {
+							target.classList.remove('just-swapped');
+
+							// 🔧 Now that the transition is done, force a re-eval of layout
+							requestAnimationFrame(() => {
+								updateLayout();
+							});
+						}, 300);
 
           },
         },
@@ -122,10 +130,16 @@ export default function DraggablePanel({
       ref={panelRef}
       class="draggable-panel"
       data-panel-id={id}
+			data-is-top={isTop}
       style={{ position: 'absolute', width: '100vw', left: '0' }}
     >
       <div class="titlebar">
-        <span class="title-text">{title}</span>
+        <span 
+					class="title-text"
+					style={{ maxWidth: !isTop && id == 'player' ? '100%' : '40%' }}
+				>
+					{title}
+				</span>
         <div class="titlebar-icons">
           {isTop ? (
             <>
@@ -164,9 +178,6 @@ function updateLayout() {
   const panelCount = sortedPanels.length;
   const heightPerPanel = 100 / panelCount;
 
-  let topId = '';
-  let topZ = -1;
-
   sortedPanels.forEach(([id, { el, z }], index) => {
     const top = `${index * heightPerPanel}vh`;
     el.style.transform = `translateY(0)`;
@@ -176,17 +187,27 @@ function updateLayout() {
     el.style.zIndex = z.toString();
     panelRegistry[id].order = index;
     localStorage.setItem(`panel-order-${id}`, index.toString());
-
-    if (z > topZ) {
-      topZ = z;
-      topId = id;
-    }
   });
 
-  if (notifyTopPanelChange && topId) {
-    notifyTopPanelChange(topId);
-  }
+  // Wait until next frame to get accurate layout
+  requestAnimationFrame(() => {
+    let topPanelId: string | null = null;
+    let minTop = Infinity;
+
+    for (const [id, { el }] of Object.entries(panelRegistry)) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < minTop) {
+        minTop = rect.top;
+        topPanelId = id;
+      }
+    }
+
+    if (notifyTopPanelChange && topPanelId) {
+      notifyTopPanelChange(topPanelId);
+    }
+  });
 }
+
 
 export function onTopPanelChange(callback: (id: string) => void) {
   notifyTopPanelChange = callback;

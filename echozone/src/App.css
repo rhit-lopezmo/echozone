@@ -35,6 +35,11 @@
 	--main-font-size: 1.1em;
 	--sub-font: 'TT Interphases Pro Mono Trial Regular', Arial, sans-serif;
 	--sub-font-size: 1rem;
+	/* --main-bg: url('/dark-angel.png') no-repeat center center; */
+	/* --main-bg: url('/cool-angel-girl.jpg') no-repeat center center; */
+	--main-bg: url('/webcore.jpg') no-repeat center center;
+	/* --main-bg: url('/cry-angel.jpg') no-repeat center center; */
+	/* --main-bg: url('/all-white.jpg') no-repeat center center; */
 }
 
 /* === Global Resets === */
@@ -52,7 +57,7 @@ html, body {
   width: 100vw;
   overflow: hidden;
   position: relative;
-  background: url('/dark-angel.png') no-repeat center center;
+  background: var(--main-bg); 
 	background-size: cover;
 	/* background: transparent; */	
 }
@@ -113,6 +118,34 @@ html, body {
 }
 
 /* === Panel Styles === */
+.scrolling-title-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.scrolling-title {
+  display: inline-flex;
+  animation-name: infinite-scroll-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes infinite-scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scroll-segment {
+  display: inline-block;
+  white-space: nowrap;
+  padding-right: 2rem;
+}
+
 .panel-container {
   height: 100%;
   width: 100%;
@@ -172,7 +205,8 @@ html, body {
 }
 
 .title-text {
-	font-size: var(--main-font-size);
+  font-size: var(--main-font-size);
+  transition: max-width 200ms ease;
 }
 
 .title-text::before {
@@ -231,7 +265,18 @@ html, body {
 .titlebar-icons {
   display: flex;
   align-items: center;
-  /* margin-left: auto; */
+	opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 100ms ease,
+    transform 150ms ease;
+  pointer-events: none;
+}
+
+.draggable-panel[data-is-top='true'] .titlebar-icons {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
 }
 
 .move-window-icon {

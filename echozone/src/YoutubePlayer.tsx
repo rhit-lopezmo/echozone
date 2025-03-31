@@ -1,7 +1,13 @@
 import { useEffect, useRef } from 'preact/hooks';
 import CRTOverlay from './CRTOverlay';
 
-export default function YouTubePlayer({ videoId }: { videoId: string }) {
+export default function YouTubePlayer({
+  videoId,
+  onTitleChange,
+}: {
+  videoId: string;
+  onTitleChange?: (title: string) => void;
+}) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<any>(null);
 
@@ -25,6 +31,9 @@ export default function YouTubePlayer({ videoId }: { videoId: string }) {
     const onPlayerReady = () => {
       playerRef.current = player;
       player.playVideo();
+
+      const videoData = player.getVideoData();
+      onTitleChange?.(videoData.title);
     };
 
     const onYouTubeIframeAPIReady = () => {
