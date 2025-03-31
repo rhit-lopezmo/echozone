@@ -6,7 +6,8 @@ export default function YouTubePlayer({ videoId }: { videoId: string }) {
 
   useEffect(() => {
     if (iframeRef.current && videoId) {
-			iframeRef.current.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&modestbranding=1&controls=1&rel=0&showinfo=0`;
+			// iframeRef.current.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&modestbranding=1&controls=1&rel=0&showinfo=0`;
+			iframeRef.current.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&enablejsapi=1&modestbranding=1&controls=1&rel=0`
     }
   }, [videoId]);
 
